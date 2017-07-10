@@ -1,3 +1,5 @@
+package collision;
+
 import haxe.ds.Vector;
 
 abstract Vec4(Vector<Float>) {

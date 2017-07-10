@@ -1,0 +1,6 @@
+-cp collision
+-cp test
+
+-main Test
+-lua build/main.lua
+-dce full

@@ -1,11 +1,9 @@
-package;
-
-// #define UNITS_PER_METER 100.0f
+package collision;
 
 class Collision {
 	private static function triangle_intersects_point(point: Vec3, v0: Vec3, v1: Vec3, v2: Vec3): Bool {
-		var u = v1 - v0;
-		var v = v2 - v0;
+		var u = v1    - v0;
+		var v = v2    - v0;
 		var w = point - v0;
 
 		var vw = Vec3.cross(v, w);
@@ -271,8 +269,19 @@ class Collision {
 			// are we the closest hit?
 			if (!packet.found_collision || dist_to_coll < packet.nearest_distance) {
 				packet.nearest_distance = dist_to_coll;
-				packet.intersect_point = collision_point;
-				packet.found_collision = true;
+				packet.intersect_point  = collision_point;
+				packet.found_collision  = true;
+			}
+
+			// HACK: USE SENSORS FOR THIS AND YOU DON'T GET WALL HITS ANYMORE
+			// Work out the hit normal so we can determine if the player is in
+			// contact with a wall or the ground.
+			var n = collision_point - packet.e_base_point;
+			n.normalize();
+
+			var dz = Vec3.dot(n, Vec3.unit_z());
+			if (dz <= -0.5) {
+				packet.grounded = true;
 			}
 		}
 
