@@ -279,7 +279,7 @@ class Collision {
 			var n = collision_point - packet.e_base_point;
 			n.normalize();
 
-			var dz = Vec3.dot(n, Vec3.unit_z());
+			var dz = Vec3.dot(n, new Vec3(0, 0, 1));
 			if (dz <= -0.5) {
 				packet.grounded = true;
 			}

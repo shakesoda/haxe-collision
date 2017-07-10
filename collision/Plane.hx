@@ -3,18 +3,17 @@ package collision;
 import haxe.ds.Vector;
 
 abstract Vec4(Vector<Float>) {
-	public function new() {
+	public function new(a, b, c, d) {
 		this = new Vector(4);
+		this[0] = a;
+		this[1] = b;
+		this[2] = c;
+		this[3] = d;
 	}
 
 	@:arrayAccess
 	public inline function get(k: Int) {
 		return this[k];
-	}
-
-	@:arrayAccess
-	public inline function set(k: Int, v: Float) {
-		this[k] = v;
 	}
 }
 
@@ -27,11 +26,10 @@ class Plane {
 	function new(a: Vec3, b: Vec3) {
 		this.origin = a;
 		this.normal = b;
-		this.equation = new Vec4();
-		this.equation[0] = b[0];
-		this.equation[1] = b[1];
-		this.equation[2] = b[2];
-		this.equation[3] = -(b[0] * a[0] + b[1] * a[1] + b[2] * a[2]);
+		this.equation = new Vec4(
+			b[0], b[1], b[2],
+			-(b[0] * a[0] + b[1] * a[1] + b[2] * a[2])
+		);
 	}
 
 	static function from_triangle(a: Vec3, b: Vec3, c: Vec3) {
@@ -41,13 +39,7 @@ class Plane {
 		var temp = Vec3.cross(ba, ca);
 		temp.normalize();
 
-		var plane = new Plane(a, temp);
-		plane.equation[0] = temp[0];
-		plane.equation[1] = temp[1];
-		plane.equation[2] = temp[2];
-		plane.equation[3] = -(temp[0] * a[0] + temp[1] * a[1] + temp[2] * a[2]);
-
-		return plane;
+		return new Plane(a, temp);
 	}
 
 	function signed_distance(base_point: Vec3) {

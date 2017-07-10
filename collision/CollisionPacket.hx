@@ -4,13 +4,13 @@ package collision;
 class CollisionPacket {
 	static var LARGE_NUMBER: Float = 1e20;
 
-	/** Position in world space. **/
+	/** Position in world space. Assumes Z-up. **/
 	var r3_position = new Vec3(0.0, 0.0, 0.0);
 
-	/** Velocity in world space. **/
+	/** Velocity in world space. Assumes Z-up. **/
 	var r3_velocity = new Vec3(0.0, 0.0, 0.0);
 
-	/** Ellipsoid radius in world units. **/
+	/** Ellipsoid radius in world units. Assumes Z-up. **/
 	var e_radius        = new Vec3(1.0, 1.0, 1.0);
 
 	/** Position in ellipsoid-space. Used internally. **/

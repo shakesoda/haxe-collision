@@ -11,18 +11,6 @@ abstract Vec3(Vector<Float>) {
 		this[2] = z;
 	}
 
-	public static function unit_x() {
-		return new Vec3(1, 0, 0);
-	}
-
-	public static function unit_y() {
-		return new Vec3(0, 1, 0);
-	}
-
-	public static function unit_z() {
-		return new Vec3(0, 0, 1);
-	}
-
 	@:arrayAccess
 	public inline function get(k: Int) {
 		return this[k];
@@ -53,19 +41,9 @@ abstract Vec3(Vector<Float>) {
 		return new Vec3(this[0] * b[0], this[1] * b[1], this[2] * b[2]);
 	}
 
-	@:op(A / B)
-	public inline function fdiv(b: Float) {
-		return new Vec3(this[0] / b, this[1] / b, this[2] / b);
-	}
-
 	@:op(A * B)
 	public inline function scale(b: Float) {
 		return new Vec3(this[0] * b, this[1] * b, this[2] * b);
-	}
-
-	@:op(-A)
-	public inline function neg() {
-		return scale(-1);
 	}
 
 	public inline function length() {
@@ -77,10 +55,11 @@ abstract Vec3(Vector<Float>) {
 	}
 
 	public inline function normalize() {
-		var l = Math.sqrt(this[0] * this[0] + this[1] * this[1] + this[2] * this[2]);
+		var l = this[0] * this[0] + this[1] * this[1] + this[2] * this[2];
 		if (l == 0) {
 			return;
 		}
+		l = Math.sqrt(l);
 		this[0] /= l;
 		this[1] /= l;
 		this[2] /= l;
@@ -92,13 +71,6 @@ abstract Vec3(Vector<Float>) {
 			a[2] * b[0] - a[0] * b[2],
 			a[0] * b[1] - a[1] * b[0]
 		);
-	}
-
-	public static inline function distance(a: Vec3, b: Vec3) {
-		var dx = a[0] - b[0];
-		var dy = a[1] - b[1];
-		var dz = a[2] - b[2];
-		return Math.sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
 	public inline function trim(max_len: Float) {
@@ -113,22 +85,6 @@ abstract Vec3(Vector<Float>) {
 		}
 	}
 
-	public static function min(a: Vec3, b: Vec3) {
-		return new Vec3(
-			Math.min(a[0], b[0]),
-			Math.min(a[1], b[1]),
-			Math.min(a[2], b[2])
-		);
-	}
-
-	public static function max(a: Vec3, b: Vec3) {
-		return new Vec3(
-			Math.max(a[0], b[0]),
-			Math.max(a[1], b[1]),
-			Math.max(a[2], b[2])
-		);
-	}
-
 	public static inline function dot(a: Vec3, b: Vec3) {
 		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	}
@@ -136,14 +92,4 @@ abstract Vec3(Vector<Float>) {
 	public function copy() {
 		return new Vec3(this[0], this[1], this[2]);
 	}
-
-	public static inline function lerp(low: Vec3, high: Vec3, progress: Float): Vec3 {
-		return ((high - low) + low) * progress;
-	}
-
-#if lua
-	public function unpack() {
-		return lua.Table.create([ this[0], this[1], this[2] ]);
-	}
-#end
 }

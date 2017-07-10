@@ -52,7 +52,14 @@ class Response {
 		var min = r3_position - query_radius;
 		var max = r3_position + query_radius;
 		var tris = this.get_triangles(min, max);
-		check_collision(packet, tris);
+		for (tri in tris) {
+			Collision.check_triangle(
+				packet,
+				tri[0] / packet.e_radius,
+				tri[1] / packet.e_radius,
+				tri[2] / packet.e_radius
+			);
+		}
 
 		// no collision
 		if (!packet.found_collision) {
@@ -100,17 +107,6 @@ class Response {
 
 		// down the rabbit hole we go
 		return collide_with_world(packet, new_base_point, new_velocity, slide_threshold);
-	}
-
-	function check_collision(packet: CollisionPacket, tris: Array<Triangle>) {
-		for (tri in tris) {
-			Collision.check_triangle(
-				packet,
-				tri[0] / packet.e_radius,
-				tri[1] / packet.e_radius,
-				tri[2] / packet.e_radius
-			);
-		}
 	}
 
 	function collide_and_slide(packet: CollisionPacket, gravity: Vec3) {
